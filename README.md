@@ -8,9 +8,9 @@
 ## Table of Contents
 * [Getting Started](#getting-started)
 * [DGP info](#dgpinfo)
-* [QRC20 info](#qrc20-info)
-* [QRC20 transfers](#qrc20-transfers)
-* [QRC20 balances](#qrc20-balances)
+* [HRC20 info](#hrc20-info)
+* [HRC20 transfers](#hrc20-transfers)
+* [HRC20 balances](#hrc20-balances)
 
 ### Statistics
 * [Total 24h](#total-24h-statistic)
@@ -21,128 +21,33 @@
 * [Stake](#stake-statistic)
 * [Total Supply](#total-supply-statistic)
 
-A QTUM blockchain REST and web socket API service for [Qtumcore Node](https://github.com/qtumproject/qtumcore-node).
+A HTMLCOIN blockchain REST and web socket API service for [HTMLCOINCORE Node](https://github.com/HTMLCOIN/htmlcoincore-node).
 
-This is a backend-only service. If you're looking for the web frontend application, take a look at https://github.com/qtumproject/qtum-explorer.
+This is a backend-only service. If you're looking for the web frontend application, take a look at https://github.com/HTMLCOIN/htmlcoin-explorer.
 
 ## Getting Started
 
-1. Install nvm https://github.com/creationix/nvm  
+```bashl
+npm install -g htmlcoincore-node@latest
+htmlcoincore-node create mynode
+cd mynode
+htmlcoincore-node install htmlcoin-api
+htmlcoincore-node start
+```
 
-    ```bash
-    nvm i v6
-    nvm use v6
-    ```  
-2. Install mongo https://docs.mongodb.com/manual/tutorial/install-mongodb-on-ubuntu/  
-
-3. Install qtum https://github.com/qtumproject/qtum - with bitcore and ZMQ ! 
-
-    ```bash
-    # with ZMQ
-    sudo apt-get install libzmq3-dev 
-    # with bitcore
-    ./configure --enable-bitcore
-    ```  
-4. Install qtumcore-node  
-
-    ```bash
-    npm i https://github.com/qtumproject/qtumcore-node.git#master
-
-    $(npm bin)/qtumcore-node create mynode
-
-    cd mynode
-
-    $(npm bin)/qtumcore-node install https://github.com/qtumproject/insight-api.git#master
-    ```  
-5. Edit qtumcore-node.json  
-
-    ```json
-    {
-      "network": "livenet",
-      "port": 3001,
-      "services": [
-        "qtumd",
-        "qtum-insight-api",
-        "web"
-      ],
-      "servicesConfig": {
-        "qtum-insight-api": {
-          "routePrefix": "qtum-insight-api",
-          "rateLimiterOptions": {
-          "whitelist": [
-             "123.456.12.34",
-             "::ffff:123.456.12.34"
-           ],
-          "whitelistLimit": 9999999,
-          "limit": 200,
-          "interval": 60000,
-          "banInterval": 3600000
-          },
-          "db": {
-            "host": "127.0.0.1",
-            "port": "27017",
-            "database": "qtum-api-livenet",
-            "user": "",
-            "password": ""
-          },
-          "erc20": {
-            "updateFromBlockHeight": 0
-          }
-        },
-        "qtumd": {
-          "spawn": {
-        	  "datadir": "/home/user/.qtum",
-            "exec": "/home/user/qtum-bitcore/src/qtumd"
-          }
-        }
-      }
-    }
-    ```  
-6. Edit qtum.conf  
-
-    ```
-    server=1
-    whitelist=127.0.0.1
-    txindex=1
-    addressindex=1
-    timestampindex=1
-    spentindex=1
-    zmqpubrawtx=tcp://127.0.0.1:28332
-    zmqpubhashblock=tcp://127.0.0.1:28332
-    rpcallowip=127.0.0.1
-    rpcuser=user
-    rpcpassword=password
-    rpcport=18332
-    reindex=1
-    gen=0
-    addrindex=1
-    logevents=1
-    ```  
-7. Run Node  
-
-    ```
-    $(npm bin)/qtumcore-node start
-    ```  
-
-8. The API endpoints will be available by default at: `http://localhost:3001/qtum-insight-api/`  
-
-## Add-on Services
-
-There add-on service available to extend the functionality of Qtumcore:
-
-- [QTUM Explorer](https://github.com/qtumproject/qtum-explorer)
+The API endpoints will be available by default at: `http://localhost:3001/htmlcoin-api/`
 
 ## Prerequisites
 
-**Note:** You can use an existing QTUM data directory, however `txindex`, `addressindex`, `timestampindex` and `spentindex` needs to be set to true in `qtum.conf`, as well as a few other additional fields.
+**Note:** You can use an existing HTMLCOIN data directory, however `txindex`, `addressindex`, `timestampindex` and `spentindex` needs to be set to true in `htmlcoin.conf`, as well as a few other additional fields.
 
 
 ## Query Rate Limit
 
-To protect the server, qtum-insight-api has a built it query rate limiter. It can be configurable in `qtumcore-node.json` with:
+To protect the server, htmlcoin-api has a built it query rate limiter. It can be configurable in `htmlcoincore-node.json` with:
 ``` json
   "servicesConfig": {
-    "qtum-insight-api": {
+    "htmlcoin-api": {
       "rateLimiterOptions": {
         "whitelist": ["::ffff:127.0.0.1"]
       }
@@ -153,34 +58,23 @@ To protect the server, qtum-insight-api has a built it query rate limiter. It ca
 Or disabled entirely with:
 ``` json
   "servicesConfig": {
-    "qtum-insight-api": {
+    "htmlcoin-api": {
       "disableRateLimiter": true
     }
   }
   ```
   
-**Note:** `routePrefix` can be configurable in `qtumcore-node.json` with:
-
-``` json
-  "servicesConfig": {
-    "qtum-insight-api": {
-      "routePrefix": "insight-api",
-    }
-  }
-  ```
-
-
 
 ## Tokens
 
 ### Token Account Balance
 
 ```
-  `GET` /insight-api/tokens/{:tokenAddressBase}/addresses/{:addressBase}/balance
+  `GET` /htmlcoin-api/tokens/{:tokenAddressBase}/addresses/{:addressBase}/balance
 ```
 or
 ```
-  `GET` /insight-api/tokens/{:tokenAddressBase}/addresses/{:addressBase}/balance?format=object
+  `GET` /htmlcoin-api/tokens/{:tokenAddressBase}/addresses/{:addressBase}/balance?format=object
 ```
 
 * **Query Params**
@@ -205,11 +99,11 @@ This would return:
 
 ### Token Total supply
 ```
-    `GET` /insight-api/tokens/{:tokenAddressBase}/total-supply
+    `GET` /htmlcoin-api/tokens/{:tokenAddressBase}/total-supply
 ```
 or
 ```
-  `GET` /insight-api/tokens/{:tokenAddressBase}/total-supply?format=object
+  `GET` /htmlcoin-api/tokens/{:tokenAddressBase}/total-supply?format=object
 ```
 
 * **Query Params**
@@ -233,7 +127,7 @@ or
 ### Token Transactions
 
 ```
-  `GET` /insight-api/tokens/{:tokenAddressBase}/transactions
+  `GET` /htmlcoin-api/tokens/{:tokenAddressBase}/transactions
 ```
 
 * **Query Params**
@@ -256,10 +150,9 @@ or
             
             `addresses=<Array.<String>>`
 
-
-E.g.:
+Eg:
 ```
-  `GET` /insight-api/tokens/QNdW79juyJNJ89h99D9vfo5QhCZpmavJNX/transactions?limit=20&offset=1&from_block=34101&to_block=34378&from_date_time=2017-10-27T01:23:10.000Z&to_date_time=2018-10-27T01:24:10.000Z&addresses[]=QbmrFnBhyMKUhrabXfaAWZTncSWbJA8FsG&addresses[]=QarHW2HjV8Z3njxiTuvUZU3hmqahKNZ49y
+  `GET` /htmlcoin-api/tokens/HNdW79juyJNJ89h99D9vfo5QhCZpmavJNX/transactions?limit=20&offset=1&from_block=34101&to_block=34378&from_date_time=2017-10-27T01:23:10.000Z&to_date_time=2018-10-27T01:24:10.000Z&addresses[]=HbmrFnBhyMKUhrabXfaAWZTncSWbJA8FsG&addresses[]=HarHW2HjV8Z3njxiTuvUZU3hmqahKNZ49y
 ```
 
 This would return:
@@ -268,8 +161,8 @@ This would return:
     "limit": 20,
     "offset": 1,
     "addresses": [
-        "QbmrFnBhyMKUhrabXfaAWZTncSWbJA8FsG",
-        "QarHW2HjV8Z3njxiTuvUZU3hmqahKNZ49y"
+        "HbmrFnBhyMKUhrabXfaAWZTncSWbJA8FsG",
+        "HarHW2HjV8Z3njxiTuvUZU3hmqahKNZ49y"
     ],
     "from_block": 34101,
     "to_block": 34378,
@@ -278,11 +171,11 @@ This would return:
     "count": 2,
     "items": [
         {
-            "contract_address_base": "QNdW79juyJNJ89h99D9vfo5QhCZpmavJNX",
+            "contract_address_base": "HNdW79juyJNJ89h99D9vfo5QhCZpmavJNX",
             "block_height": 34377,
             "tx_hash": "e5c16ea5785fed909957100c3721a62f5f5dfe427af1c926ba11e64c3f905fab",
-            "from": "QNvEBPtXwezdJjkUUy2JF6pirGn1vtkaNt",
-            "to": "QarHW2HjV8Z3njxiTuvUZU3hmqahKNZ49y",
+            "from": "HNvEBPtXwezdJjkUUy2JF6pirGn1vtkaNt",
+            "to": "HarHW2HjV8Z3njxiTuvUZU3hmqahKNZ49y",
             "value": "100000000000",
             "block_date_time": "2017-10-27T12:28:48.000Z"
         }
@@ -290,11 +183,13 @@ This would return:
 }
 ```
 
+
+
 ## API HTTP Endpoints
 
 ### Account Info
 ```
-  `GET` /insight-api/contracts/{:contractHash}/info
+  `GET` /htmlcoin-api/contracts/{:contractHash}/info
 ```
 This would return:
 ```
@@ -324,7 +219,7 @@ This would return:
 
 ### Total 24h Statistic
 ```
-  `GET` /insight-api/statistics/total
+  `GET` /htmlcoin-api/statistics/total
 ```
 This would return:
 ```
@@ -341,7 +236,7 @@ This would return:
 ```
 ### Transactions Statistic
 ```
-  `GET` /insight-api/statistics/transactions?days=14
+  `GET` /htmlcoin-api/statistics/transactions?days=14
 ```
 This would return:
 ```
@@ -357,7 +252,7 @@ This would return:
 
 ### Fees Statistic
 ```
-  `GET` /insight-api/statistics/fees?days=14
+  `GET` /htmlcoin-api/statistics/fees?days=14
 ```
 This would return:
 ```
@@ -371,7 +266,7 @@ This would return:
 ```
 ### Outputs Statistic
 ```
-  `GET` /insight-api/statistics/outputs?days=14
+  `GET` /htmlcoin-api/statistics/outputs?days=14
 ```
 This would return:
 ```
@@ -385,7 +280,7 @@ This would return:
 ```
 ### Difficulty Statistic
 ```
-  `GET` /insight-api/statistics/difficulty?days=14
+  `GET` /htmlcoin-api/statistics/difficulty?days=14
 ```
 This would return:
 ```
@@ -399,7 +294,7 @@ This would return:
 ```
 ### Stake Statistic
 ```
-  `GET` /insight-api/statistics/stake?days=14
+  `GET` /htmlcoin-api/statistics/stake?days=14
 ```
 This would return:
 ```
@@ -415,11 +310,11 @@ This would return:
 ### Total Supply Statistic
 
 ```
-  `GET` /insight-api/circulating-supply
+  `GET` /htmlcoin-api/circulating-supply
 ```
 or
 ```
-  `GET` /insight-api/circulating-supply/?format=object
+  `GET` /htmlcoin-api/circulating-supply/?format=object
 ```
 This would return:
 ```
@@ -434,11 +329,11 @@ or
 
 
 ```
-  `GET` /insight-api/supply
+  `GET` /htmlcoin-api/supply
 ```
 or
 ```
-  `GET` /insight-api/supply?format=object
+  `GET` /htmlcoin-api/supply?format=object
 ```
 This would return:
 ```
@@ -453,15 +348,15 @@ or
 
 ### Block
 ```
-  /insight-api/block/[:hash]
-  /insight-api/block/00000000a967199a2fad0877433c93df785a8d8ce062e5f9b451cd1397bdbf62
+  /htmlcoin-api/block/[:hash]
+  /htmlcoin-api/block/00000000a967199a2fad0877433c93df785a8d8ce062e5f9b451cd1397bdbf62
 ```
 
 ### Block Index
 Get block hash by height
 ```
-  /insight-api/block-index/[:height]
-  /insight-api/block-index/0
+  /htmlcoin-api/block-index/[:height]
+  /htmlcoin-api/block-index/0
 ```
 This would return:
 ```
@@ -474,8 +369,8 @@ which is the hash of the Genesis block (0 height)
 
 ### Raw Block
 ```
-  /insight-api/rawblock/[:blockHash]
-  /insight-api/rawblock/[:blockHeight]
+  /htmlcoin-api/rawblock/[:blockHash]
+  /htmlcoin-api/rawblock/[:blockHeight]
 ```
 
 This would return:
@@ -489,7 +384,7 @@ This would return:
 
 Get block summaries by date:
 ```
-  /insight-api/blocks?limit=3&blockDate=2016-04-22
+  /htmlcoin-api/blocks?limit=3&blockDate=2016-04-22
 ```
 
 Example response:
@@ -523,31 +418,31 @@ Example response:
 
 ### Transaction
 ```
-  /insight-api/tx/[:txid]
-  /insight-api/tx/525de308971eabd941b139f46c7198b5af9479325c2395db7f2fb5ae8562556c
-  /insight-api/rawtx/[:rawid]
-  /insight-api/rawtx/525de308971eabd941b139f46c7198b5af9479325c2395db7f2fb5ae8562556c
+  /htmlcoin-api/tx/[:txid]
+  /htmlcoin-api/tx/525de308971eabd941b139f46c7198b5af9479325c2395db7f2fb5ae8562556c
+  /htmlcoin-api/rawtx/[:rawid]
+  /htmlcoin-api/rawtx/525de308971eabd941b139f46c7198b5af9479325c2395db7f2fb5ae8562556c
 ```
 
 ### Address
 ```
-  /insight-api/addr/[:addr][?noTxList=1][&from=&to=]
-  /insight-api/addr/mmvP3mTe53qxHdPqXEvdu8WdC7GfQ2vmx5?noTxList=1
-  /insight-api/addr/mmvP3mTe53qxHdPqXEvdu8WdC7GfQ2vmx5?from=1000&to=2000
+  /htmlcoin-api/addr/[:addr][?noTxList=1][&from=&to=]
+  /htmlcoin-api/addr/mmvP3mTe53qxHdPqXEvdu8WdC7GfQ2vmx5?noTxList=1
+  /htmlcoin-api/addr/mmvP3mTe53qxHdPqXEvdu8WdC7GfQ2vmx5?from=1000&to=2000
 ```
 
 ### Address Properties
 ```
-  /insight-api/addr/[:addr]/balance
-  /insight-api/addr/[:addr]/totalReceived
-  /insight-api/addr/[:addr]/totalSent
-  /insight-api/addr/[:addr]/unconfirmedBalance
+  /htmlcoin-api/addr/[:addr]/balance
+  /htmlcoin-api/addr/[:addr]/totalReceived
+  /htmlcoin-api/addr/[:addr]/totalSent
+  /htmlcoin-api/addr/[:addr]/unconfirmedBalance
 ```
 The response contains the value in Satoshis.
 
 ### Unspent Outputs
 ```
-  /insight-api/addr/[:addr]/utxo
+  /htmlcoin-api/addr/[:addr]/utxo
 ```
 Sample return:
 ```
@@ -578,13 +473,13 @@ Sample return:
 ### Unspent Outputs for Multiple Addresses
 GET method:
 ```
-  /insight-api/addrs/[:addrs]/utxo
-  /insight-api/addrs/2NF2baYuJAkCKo5onjUKEPdARQkZ6SYyKd5,2NAre8sX2povnjy4aeiHKeEh97Qhn97tB1f/utxo
+  /htmlcoin-api/addrs/[:addrs]/utxo
+  /htmlcoin-api/addrs/2NF2baYuJAkCKo5onjUKEPdARQkZ6SYyKd5,2NAre8sX2povnjy4aeiHKeEh97Qhn97tB1f/utxo
 ```
 
 POST method:
 ```
-  /insight-api/addrs/utxo
+  /htmlcoin-api/addrs/utxo
 ```
 
 POST params:
@@ -594,31 +489,30 @@ addrs: 2NF2baYuJAkCKo5onjUKEPdARQkZ6SYyKd5,2NAre8sX2povnjy4aeiHKeEh97Qhn97tB1f
 
 ### Transactions by Block
 ```
-  /insight-api/txs/?block=HASH
-  /insight-api/txs/?block=00000000fa6cf7367e50ad14eb0ca4737131f256fc4c5841fd3c3f140140e6b6
+  /htmlcoin-api/txs/?block=HASH
+  /htmlcoin-api/txs/?block=00000000fa6cf7367e50ad14eb0ca4737131f256fc4c5841fd3c3f140140e6b6
 ```
-
 ### Transactions by Address
 ```
-  /insight-api/txs/?address=ADDR
-  /insight-api/txs/?address=mmhmMNfBiZZ37g1tgg2t8DDbNoEdqKVxAL
+  /htmlcoin-api/txs/?address=ADDR
+  /htmlcoin-api/txs/?address=mmhmMNfBiZZ37g1tgg2t8DDbNoEdqKVxAL
 ```
 
 ### Transactions Receipt
 ```
-  /insight-api/txs/[:tx_id]/receipt
+  /htmlcoin-api/txs/[:tx_id]/receipt
 ```
 
 ### Transactions for Multiple Addresses
 GET method:
 ```
-  /insight-api/addrs/[:addrs]/txs[?from=&to=]
-  /insight-api/addrs/2NF2baYuJAkCKo5onjUKEPdARQkZ6SYyKd5,2NAre8sX2povnjy4aeiHKeEh97Qhn97tB1f/txs?from=0&to=20
+  /htmlcoin-api/addrs/[:addrs]/txs[?from=&to=]
+  /htmlcoin-api/addrs/2NF2baYuJAkCKo5onjUKEPdARQkZ6SYyKd5,2NAre8sX2povnjy4aeiHKeEh97Qhn97tB1f/txs?from=0&to=20
 ```
 
 POST method:
 ```
-  /insight-api/addrs/txs
+  /htmlcoin-api/addrs/txs
 ```
 
 POST params:
@@ -666,7 +560,7 @@ Note: if pagination params are not specified, the result is an array of transact
 ### Transaction Broadcasting
 POST method:
 ```
-  /insight-api/tx/send
+  /htmlcoin-api/tx/send
 ```
 POST params:
 ```
@@ -692,22 +586,22 @@ POST response:
 
 ### Historic Blockchain Data Sync Status
 ```
-  /insight-api/sync
+  /htmlcoin-api/sync
 ```
 
 ### Live Network P2P Data Sync Status
 ```
-  /insight-api/peer
+  /htmlcoin-api/peer
 ```
 
-### Status of the QTUM Network
+### Status of the HTMLCOIN Network
 ```
-  /insight-api/status?q=xxx
+  /htmlcoin-api/status?q=xxx
 ```
 
 ### DGP info
 ```
-  /insight-api/dgpinfo
+  /htmlcoin-api/dgpinfo
 ```
 
 Where "xxx" can be:
@@ -720,12 +614,12 @@ Where "xxx" can be:
 
 ### Utility Methods
 ```
-  /insight-api/utils/estimatefee[?nbBlocks=2]
+  /htmlcoin-api/utils/estimatefee[?nbBlocks=2]
 ```
 
 ### Min Estimate Fee Per KB
 ```
-  /insight-api/utils/minestimatefee[?nbBlocks=2]
+  /htmlcoin-api/utils/minestimatefee[?nbBlocks=2]
 ```
 
 resp:
@@ -736,33 +630,27 @@ resp:
 }
 ```
 
-### QRC20 info
+### HRC20 info
 ```
-  /insight-api/erc20/:contractAddress
-  > DEPRECATED
-```
-    
-```
-  /insight-api/qrc20/:contractAddress
+  /htmlcoin-api/erc20/:contractAddress
 ```
 
-### QRC20 transfers
+### HRC20 transfers
 ```
-  /insight-api/erc20/:contractAddress/transfers
+  /htmlcoin-api/erc20/:contractAddress/transfers
 ```
 
-### QRC20 balances
+### HRC20 balances
 ```
-  /insight-api/erc20/:contractAddress/balances
+  /htmlcoin-api/erc20/:contractAddress/balances
 ```
 
 ### Call Contract
 ```
-/insight-api/contracts/:contractaddress/hash/:contracthash/call
+/htmlcoin-api/contracts/:contractaddress/hash/:contracthash/call
 ```
 
 ## Web Socket API
-
 The web socket API is served using [socket.io](http://socket.io).
 
 The following are the events published by insight:
@@ -851,3 +739,4 @@ IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
 CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+

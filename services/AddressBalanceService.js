@@ -314,7 +314,7 @@ AddressBalanceService.prototype.start = function (next) {
 
         self._rapidProtectedUpdateTip(self.lastTipHeight);
 
-        self.node.services.qtumd.on('tip', self._rapidProtectedUpdateTip.bind(self));
+        self.node.services.htmlcoind.on('tip', self._rapidProtectedUpdateTip.bind(self));
 
         self.marketsService.on('updated', function () {
             return self.updateRicherThanCache(function (err) {
@@ -514,7 +514,7 @@ AddressBalanceService.prototype.processBlock = function (blockHeight, next) {
                             return callback(err)
                         }
 
-                        var balanceSat = new BigNumber(result.balance);
+                        var balanceSat = new BigNumber(String(result.balance));
                         dataFlow.balance = balanceSat.dividedBy(1e8).toNumber();
 
                         return callback();

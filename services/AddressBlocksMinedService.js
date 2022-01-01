@@ -1,6 +1,6 @@
 var Common = require('../lib/common');
 var async = require('async');
-var qtumcore = require('qtumcore-lib');
+var qtumcore = require('htmlcoin-lib');
 var TYPE = 'BLOCKS_MINED';
 
 function AddressBlocksMinedService(options) {
@@ -91,7 +91,7 @@ AddressBlocksMinedService.prototype.start = function (next) {
 
         self._rapidProtectedUpdateTip(self.lastTipHeight);
 
-        self.node.services.qtumd.on('tip', self._rapidProtectedUpdateTip.bind(self));
+        self.node.services.htmlcoind.on('tip', self._rapidProtectedUpdateTip.bind(self));
 
         return next();
 
@@ -200,7 +200,7 @@ AddressBlocksMinedService.prototype.processBlock = function (blockHeight, next) 
 
 
     return async.waterfall([function (callback) {
-        return self.node.services.qtumd.getJsonBlock(blockHeight, function (err, response) {
+        return self.node.services.htmlcoind.getJsonBlock(blockHeight, function (err, response) {
 
             if (err) {
                 return callback(err);
