@@ -1,6 +1,6 @@
 var Common = require('../lib/common');
 var async = require('async');
-var qtumcore = require('htmlcoin-lib');
+var qtumcore = require('qtumcore-lib');
 var TYPE = 'BLOCKS_MINED';
 
 function AddressBlocksMinedService(options) {

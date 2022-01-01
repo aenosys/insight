@@ -1,7 +1,7 @@
 'use strict';
 
 var async = require('async');
-var bitcore = require('htmlcoin-lib');
+var bitcore = require('qtumcore-lib');
 var BigNumber = require('bignumber.js');
 var LRU = require('lru-cache');
 var Common = require('../lib/common');
