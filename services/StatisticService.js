@@ -63,7 +63,7 @@ util.inherits(StatisticService, EventEmitter);
 StatisticService.prototype.start = function (callback) {
 
     var self = this,
-        height = self.node.services.htmlcoind.height;
+        height = self.node.services.qtumd.height;
 
     return async.waterfall([function (callback) {
         return self.lastBlockRepository.setLastBlockType(STATISTIC_TYPE, 0, function(err) {
@@ -119,7 +119,7 @@ StatisticService.prototype.start = function (callback) {
             return callback(err);
         }
 
-        self.node.services.htmlcoind.on('tip', self._rapidProtectedUpdateTip.bind(self));
+        self.node.services.qtumd.on('tip', self._rapidProtectedUpdateTip.bind(self));
         self._rapidProtectedUpdateTip(height);
 
         return callback(err);
@@ -1001,7 +1001,7 @@ StatisticService.prototype.getTotal = function(nextCb) {
  * @return {BigNumber} supply - BigNumber representation of total supply
  */
 StatisticService.prototype.getTotalSupply  = function() {
-    var height = this.node.services.htmlcoind.height;
+    var height = this.node.services.qtumd.height;
     var newHeightSinceGenesis = height - 798;
     var newCoinSinceGenesis = newHeightSinceGenesis * 1250;
     var supply = newCoinSinceGenesis + 79800000000;
